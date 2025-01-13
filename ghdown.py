@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+from urllib.parse import urlparse
+
 import click
 import requests
-import os
-import re
-from urllib.parse import urlparse
+
 
 def parse_github_url(url):
     """解析GitHub URL获取用户名和仓库名"""
@@ -84,19 +84,19 @@ def main(target, tag, output, token):
         if tag:
             parsed_tag = tag
         
-        click.echo(f'正在获取 {user}/{repo} 的release信息...')
+        click.echo(f'Fetching release information for {user}/{repo}...')
         asset_info = get_asset_info(user, repo, parsed_tag, token)
         
         # 确定输出路径
         output_path = output if output else asset_info['name']
         
-        click.echo(f'正在下载 {asset_info["name"]}...')
+        click.echo(f'Downloading {asset_info["name"]}...')
         download_asset(asset_info['url'], token, output_path)
         
-        click.echo(f'下载完成: {output_path}')
+        click.echo(f'Download completed: {output_path}')
         
     except requests.exceptions.RequestException as e:
-        raise click.ClickException(f'下载失败: {str(e)}')
+        raise click.ClickException(f'Download failed: {str(e)}')
 
 if __name__ == '__main__':
     main()
